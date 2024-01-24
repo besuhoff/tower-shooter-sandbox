@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-      "outDir": "./dist/",
+      "outDir": "./docs/",
       "rootDir": ".",
       "lib": ["ES2015", "DOM"],
       "noImplicitAny": true,
