@@ -1,5 +1,27 @@
-<!doctype html><html><head><style>body {
+<!doctype html><html><head><style>#game {
+                background: #d0ebff;
+                position: relative;
                 margin: 0 auto;
-                display: block;
-                max-width: min-content;
-            }</style><script defer="defer" src="bundle.js"></script></head><body><div id="game"></div><p>FPS: <span id="fps"></span></p></body></html>
+            }
+
+            #game canvas {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+
+            .panel {
+                max-width: 800px;
+                margin: 12px auto;
+                display: flex;
+                flex-flow: column nowrap;
+                gap: 6px;
+            }
+
+            .panel p {
+                margin: 0;
+            }
+
+            #radius {
+                width: 50px;
+            }</style><script defer="defer" src="bundle.js"></script></head><body><div class="panel"><h1 style="text-align: center;">Scorched earth II</h1>Click and hold mouse to add a portion of sand. Tweak Radius value to make the brush bigger or smaller. Right mouse button erases the square portion of sand of the same radius. Hit "Add tank" to add a random tank.</div><div id="game"></div><div class="panel"><div><p>FPS: <span id="fps"></span></p></div><div>Sand radius: <input name="radius" value="10" type="number" id="radius"></div><div><button data-action="addTank">Add tank</button></div></div></body></html>
