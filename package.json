@@ -6,14 +6,19 @@
   "scripts": {
     "build": "webpack",
     "start": "webpack-dev-server",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prettier:write": "prettier -w src/"
   },
   "author": "Sergiy Pereverziev",
   "license": "ISC",
   "devDependencies": {
-    "@types/uuid": "^9.0.7",
     "@types/lodash": "^4.14.202",
+    "@types/uuid": "^9.0.7",
+    "copy-webpack-plugin": "^12.0.2",
+    "css-loader": "^6.9.1",
     "html-webpack-plugin": "^5.6.0",
+    "prettier": "^3.2.4",
+    "style-loader": "^3.3.4",
     "ts-loader": "^9.5.1",
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4",

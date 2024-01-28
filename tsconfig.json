@@ -10,5 +10,6 @@
       "allowJs": true,
       "moduleResolution": "node",
       "sourceMap": true
-    }
+    },
+    "include": ["src/**/*.ts"]
   }

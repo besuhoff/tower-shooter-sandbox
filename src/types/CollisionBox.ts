@@ -1,7 +1,7 @@
-import { Dimensions } from './Dimensions';
-import { Point } from './Point';
+import { Dimensions } from "./Dimensions";
+import { Point } from "./Point";
 
 export interface CollisionBox {
-    readonly leftTopCoords: Point;
-    readonly dimensions: Dimensions;
+  readonly leftTopCoords: Point;
+  readonly dimensions: Dimensions;
 }
