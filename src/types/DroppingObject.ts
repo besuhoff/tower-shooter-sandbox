@@ -1,7 +1,7 @@
-import { Sprite } from '../Sprite';
+import { Sprite } from "../objects/Sprite";
 
 export interface DroppingObject {
-    readonly sprite: Sprite;
-    readonly speed: number;
-    readonly id: string;
+  readonly sprite: Sprite;
+  readonly speed: number;
+  readonly id: string;
 }

@@ -1,0 +1,42 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
+#main {
+    max-width: min-content;
+    margin: 0 auto;
+}
+
+#game {
+    background: url(../assets/stars.webp) center center no-repeat; /* #d0ebff */;
+    background-size: cover;
+    position: relative;
+    margin: 0 auto;
+}
+
+#game canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.panel {
+    margin: 12px 0;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 6px;
+}
+
+.panel h1 {
+    margin: 0 0 12px;
+    text-align: center;
+}
+
+.panel p {
+    margin: 0;
+}
+
+#radius {
+    width: 50px;
+}

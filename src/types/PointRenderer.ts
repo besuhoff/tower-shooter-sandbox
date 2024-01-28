@@ -1,7 +1,6 @@
-import { Dimensions } from './Dimensions';
-import { Point } from './Point';
+import { Point } from "./Point";
+import { Renderer } from "./Renderer";
 
-export interface PointRenderer {
-    clearRect(point: Point, dimensions: Dimensions): void;
-    renderPoint(point: Point, color?: string): void;
+export interface PointRenderer extends Renderer {
+  renderPoint(point: Point, color?: string): void;
 }

@@ -1,40 +1,16 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <style>
-            #game {
-                background: #d0ebff;
-                position: relative;
-                margin: 0 auto;
-            }
 
-            #game canvas {
-                position: absolute;
-                left: 0;
-                top: 0;
-            }
+<head>
+    <title>Scorched Earth II</title>
+</head>
 
-            .panel {
-                max-width: 800px;
-                margin: 12px auto;
-                display: flex;
-                flex-flow: column nowrap;
-                gap: 6px;
-            }
-
-            .panel p {
-                margin: 0;
-            }
-
-            #radius {
-                width: 50px;
-            }
-        </style>
-    </head>
-    <body>
+<body>
+    <main id="main">
         <div class="panel">
-            <h1 style="text-align: center;">Scorched earth II</h1>
-            Click and hold mouse to add a portion of sand. Tweak Radius value to make the brush bigger or smaller. Right mouse button erases the square portion of sand of the same radius. Hit "Add tank" to add a random tank.
+            <h1>Scorched Earth II</h1>
+            Click and hold mouse to add a portion of sand. Tweak Radius value to make the brush bigger or smaller. Right
+            mouse button erases the square portion of sand of the same radius. Hit "Add tank" to add a random tank.
         </div>
         <div id="game"></div>
         <div class="panel">
@@ -48,5 +24,7 @@
                 <button data-action="addTank">Add tank</button>
             </div>
         </div>
-    </body>
+        </div>
+</body>
+
 </html>
