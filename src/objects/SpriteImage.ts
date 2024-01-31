@@ -5,11 +5,13 @@ type SpriteImageOptions = {
   rotation?: number;
   rotationCenterCoords?: Point;
   flipped?: FlipDirections;
+  animationDuration?: number;
 };
 
 export class SpriteImage {
   readonly imageElement: HTMLImageElement;
   readonly rotationCenterCoords: Point;
+  readonly animationDuration: number;
   private _rotation = 0;
   private _flipped: FlipDirections;
 
@@ -23,11 +25,13 @@ export class SpriteImage {
       rotation = 0,
       rotationCenterCoords = { x: 0, y: 0 },
       flipped = FlipDirections.None,
+      animationDuration = null,
     } = options;
 
     this._rotation = rotation;
     this.rotationCenterCoords = rotationCenterCoords;
     this._flipped = flipped;
+    this.animationDuration = animationDuration;
     
     this.imageElement = new Image();
     this.imageElement.src = url;

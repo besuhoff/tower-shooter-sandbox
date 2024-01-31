@@ -1,5 +1,3 @@
-import { Dimensions } from "../types/Dimensions";
-import { Point } from "../types/Point";
 import { Renderer } from "../types/Renderer";
 
 export abstract class CanvasRenderer implements Renderer {
@@ -11,10 +9,6 @@ export abstract class CanvasRenderer implements Renderer {
       throw new Error("Could not render as the context is not ready");
       return;
     }
-  }
-  
-  clearRect({ x, y }: Point, { width, height }: Dimensions) {
-    this._renderContext.clearRect(x, y, width, height);
   }
 
   clear() {

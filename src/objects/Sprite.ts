@@ -1,7 +1,8 @@
-import { Dimensions } from "../types/Dimensions";
 import { Point } from "../types/Point";
 import { CollisionBox } from "../types/CollisionBox";
 import { SpriteImage } from "./SpriteImage";
+import { keyBy } from "lodash";
+import { SpriteRendererOptions } from "../types/SpriteRendererOptions";
 
 export class Sprite {
   readonly collisionBox: CollisionBox | null;
@@ -14,13 +15,12 @@ export class Sprite {
     images: SpriteImage[],
     animations: SpriteImage[],
     collisionBox: CollisionBox,
+    private _renderers: SpriteRendererOptions,
   ) {
     this.collisionBox = collisionBox;
     this._centerBottomCoords = spaceCoords;
-    this._imageMapById = images.reduce((accum, image) => {
-      accum[image.id] = image;
-      return accum;
-    }, {} as Record<string, SpriteImage>);
+    this._imageMapById = keyBy(images, 'id');
+    this._animationMapById = keyBy(animations, 'id');
   }
 
   getCollisionPointsArray(): Point[] {
@@ -59,5 +59,17 @@ export class Sprite {
 
   getImageById(id: string): SpriteImage {
     return this._imageMapById[id];
+  }
+
+  getAnimationById(id: string): SpriteImage {
+    return this._animationMapById[id];
+  }
+
+  renderImage(id: string) {
+    this._renderers.imageRenderer.renderImage(this.centerBottomCoords, this._imageMapById[id]);
+  }
+
+  renderAnimation(id: string) {
+    this._renderers.animationRenderer.renderImage(this.centerBottomCoords, this._animationMapById[id]);
   }
 }

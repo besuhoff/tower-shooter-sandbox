@@ -8,14 +8,15 @@ import { Sprite } from "./objects/Sprite";
 import { CanvasImageRenderer } from "./render/CanvasImageRenderer";
 import { Direction } from "./types/Direction";
 import { Color } from "./types/Color";
+import { HtmlImageRenderer } from "./render/HtmlImageRenderer";
 
 export class CanvasSpace {
   readonly width: number;
   readonly height: number;
 
   private _pixelMatrix: PixelMatrix;
-  private _sprites: Sprite[] = [];
-  private _spriteRenderer: CanvasImageRenderer;
+  private _canvasImageRenderer: CanvasImageRenderer;
+  private _htmlImageRenderer: HtmlImageRenderer;
   private _tanks: Tank[] = [];
   private _currentPlayerIndex = 0;
 
@@ -33,16 +34,24 @@ export class CanvasSpace {
       "game-canvas-sprite",
       container
     );
-    this._spriteRenderer = new CanvasImageRenderer(spriteCanvas);
+    this._canvasImageRenderer = new CanvasImageRenderer(spriteCanvas);
+
+    const htmlImageContainer = document.createElement('div');
+    htmlImageContainer.id = 'html-image-container';
+    htmlImageContainer.style.cssText = `
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+    `;
+
+    container.appendChild(htmlImageContainer);
+    this._htmlImageRenderer = new HtmlImageRenderer(htmlImageContainer);
 
     this.width = width;
     this.height = height;
-  }
-
-  private _renderSprite(sprite: Sprite): void {
-    sprite.images.forEach(image => {
-        this._spriteRenderer.renderImage(sprite.centerBottomCoords, image);
-    });
   }
 
   addSparseSandSquare(point: Point, radius?: number): void {
@@ -53,10 +62,14 @@ export class CanvasSpace {
     return this._pixelMatrix.eraseSandSquare(point, radius);
   }
 
-  addTank({ position, color }: { position: Point, color?: Color }) {
-    const tank = new Tank({ position, color });
+  addTank({ position, color }: { position: Point; color?: Color }) {
+    const tank = new Tank({
+      position,
+      color,
+      imageRenderer: this._canvasImageRenderer,
+      animationRenderer: this._htmlImageRenderer,
+    });
     this._pixelMatrix.addDroppingObject(position, tank);
-    this._sprites.push(tank.sprite);
     this._tanks.push(tank);
   }
 
@@ -70,8 +83,8 @@ export class CanvasSpace {
   }
 
   renderSprites() {
-    this._spriteRenderer.clear();
-    this._sprites.forEach((sprite) => this._renderSprite(sprite));
+    this._canvasImageRenderer.clear();
+    this._tanks.forEach(tank => tank.render());
   }
 
   render() {
@@ -80,6 +93,12 @@ export class CanvasSpace {
   }
 
   shoot() {
-    this._currentPlayerIndex = (this._currentPlayerIndex + 1) % this._tanks.length;
+    if (!this._tanks.length) {
+      return;
+    }
+
+    this._tanks[this._currentPlayerIndex].shoot();
+    this._currentPlayerIndex =
+      (this._currentPlayerIndex + 1) % this._tanks.length;
   }
 }
