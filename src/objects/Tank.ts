@@ -29,6 +29,8 @@ import BlastAnimation from "../assets/bomb.gif";
 import { SpriteImage } from "./SpriteImage";
 import { Color } from "../types/Color";
 import { FlipDirections } from "../types/FlipDirections";
+import { ImageRenderer } from "../types/ImageRenderer";
+import { SpriteRendererOptions } from "../types/SpriteRendererOptions";
 
 const ANGLE_RANGES = [
   [-10, 80],
@@ -57,7 +59,7 @@ type TankOptions = {
   position: Point;
   direction?: Direction;
   color?: Color;
-};
+} & SpriteRendererOptions;
 
 export class Tank implements DroppingObject {
   readonly sprite: Sprite;
@@ -69,9 +71,11 @@ export class Tank implements DroppingObject {
     position,
     direction = Direction.Right,
     color = Color.Green,
+    imageRenderer,
+    animationRenderer,
   }: TankOptions) {
     const tankImage = new SpriteImage(
-      TANK_SPRITE_ID,
+      `${this.id}_${TANK_SPRITE_ID}`,
       IMAGE_BY_COLOR_MAP[color].tank,
       { x: -11, y: -14 },
       {
@@ -85,7 +89,7 @@ export class Tank implements DroppingObject {
     this._tankDirection = direction;
 
     const trunkImage = new SpriteImage(
-      TRUNK_SPRITE_ID,
+      `${this.id}_${TRUNK_SPRITE_ID}`,
       IMAGE_BY_COLOR_MAP[color].trunk,
       {
         x: direction === Direction.Left ? TRUNK_X_LEFT : TRUNK_X_RIGHT,
@@ -98,7 +102,7 @@ export class Tank implements DroppingObject {
     );
 
     const blastImage = new SpriteImage(
-      BLAST_SPRITE_ID,
+      `${this.id}_${BLAST_SPRITE_ID}`,
       BlastAnimation,
       {
         x: direction === Direction.Left ? TRUNK_X_LEFT - 4 : TRUNK_X_RIGHT - 4,
@@ -106,7 +110,8 @@ export class Tank implements DroppingObject {
       },
       {
         rotation: direction === Direction.Left ? 0 : 180,
-        rotationCenterCoords: { x: 9, y: 2 },
+        rotationCenterCoords: { x: 9, y: 0 },
+        animationDuration: 1000,
       }
     );
 
@@ -121,12 +126,16 @@ export class Tank implements DroppingObject {
         width: 17,
         height: 8,
       },
+    }, {
+      animationRenderer,
+      imageRenderer,
     });
   }
 
   rotateTrunk(rotationDirection: Direction) {
-    const tankSpriteImage = this.sprite.getImageById(TANK_SPRITE_ID);
-    const trunkSpriteImage = this.sprite.getImageById(TRUNK_SPRITE_ID);
+    const tankSpriteImage = this.sprite.getImageById(this.id + '_' + TANK_SPRITE_ID);
+    const trunkSpriteImage = this.sprite.getImageById(this.id + '_' + TRUNK_SPRITE_ID);
+    const blastSpriteImage = this.sprite.getAnimationById(this.id + '_' + BLAST_SPRITE_ID);
 
     const addition = rotationDirection === Direction.Left ? -1 : 1;
     let newTankDirection = this._tankDirection;
@@ -152,12 +161,24 @@ export class Tank implements DroppingObject {
     }
 
     trunkSpriteImage.rotate(newRotation);
+    blastSpriteImage.rotate(newRotation);
 
     if (newTankDirection !== this._tankDirection) {
       this._tankDirection = newTankDirection;
       tankSpriteImage.flip(FlipDirections.Horizontal);
       trunkSpriteImage.coords.x =
         newTankDirection === Direction.Left ? TRUNK_X_LEFT : TRUNK_X_RIGHT;
+      blastSpriteImage.coords.x =
+        newTankDirection === Direction.Left ? TRUNK_X_LEFT - 4 : TRUNK_X_RIGHT - 4;
     }
+  }
+
+  render() {
+    this.sprite.renderImage(this.id + '_' + TANK_SPRITE_ID);
+    this.sprite.renderImage(this.id + '_' + TRUNK_SPRITE_ID);
+  }
+
+  shoot() {
+    this.sprite.renderAnimation(this.id + '_' + BLAST_SPRITE_ID);
   }
 }

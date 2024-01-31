@@ -14,7 +14,7 @@ container.style.width = `${SCREEN_WIDTH}px`;
 container.style.height = `${SCREEN_HEIGHT}px`;
 const game = new CanvasSpace(
   { width: SCREEN_WIDTH, height: SCREEN_HEIGHT },
-  container
+  container,
 );
 
 let generationInterval: ReturnType<typeof setInterval> = null;
@@ -22,7 +22,7 @@ let generationPoint: Point = null;
 
 container.addEventListener("contextmenu", (event) => event.preventDefault());
 
-container.addEventListener("mousedown", (event) => {
+const startGeneratingSand = (event: MouseEvent) => {
   const { offsetX, offsetY } = event;
   generationPoint = {
     x: clamp(offsetX, 0, SCREEN_WIDTH - 1),
@@ -38,13 +38,20 @@ container.addEventListener("mousedown", (event) => {
     }
     game.addSparseSandSquare(generationPoint, radius);
   }, 40);
-});
+};
 
-document.addEventListener("mouseup", () => {
+container.addEventListener('touchmove', startGeneratingSand);
+container.addEventListener("mousedown", startGeneratingSand);
+
+
+const clearSandInterval = () => {
   clearInterval(generationInterval);
-});
+};
 
-container.addEventListener("mousemove", (event) => {
+document.addEventListener("mouseup", clearSandInterval);
+document.addEventListener("touchend", clearSandInterval);
+
+const moveSandGenerationPoint = (event: MouseEvent) => {
   if (!generationInterval) {
     return;
   }
@@ -54,7 +61,9 @@ container.addEventListener("mousemove", (event) => {
     x: clamp(offsetX, 0, SCREEN_WIDTH - 1),
     y: clamp(offsetY, 0, SCREEN_HEIGHT - 1),
   };
-});
+}
+container.addEventListener("mousemove", moveSandGenerationPoint);
+container.addEventListener("touchmove", moveSandGenerationPoint);
 
 const colors = Object.values(Color);
 
@@ -73,6 +82,8 @@ document
     if (!colors.length) {
       this.disabled = true;
     }
+
+    this.blur();
   });
 
 document.addEventListener("keydown", (event) => {
